@@ -1,0 +1,46 @@
+name: Zbuduj moda
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Poukladaj pliki w foldery
+        run: |
+          mkdir -p src/main/java/com/ferrekkordy/screen src/main/resources/assets/ferrekkordy/lang gradle/wrapper
+          mv AddWaypointScreen.java WaypointListScreen.java src/main/java/com/ferrekkordy/screen/ || true
+          mv *.java src/main/java/com/ferrekkordy/ || true
+          mv fabric.mod.json src/main/resources/ || true
+          mv en_us.json pl_pl.json src/main/resources/assets/ferrekkordy/lang/ || true
+          mv gradle-wrapper.jar gradle-wrapper.properties gradle/wrapper/ || true
+          find src gradle -type f
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Build
+        run: |
+          chmod +x gradlew
+          ./gradlew build --no-daemon
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FerrekKordy-mod
+          path: build/libs/*.jar
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: FerrekKordy (build ${{ github.run_number }})
+          files: build/libs/*.jar
