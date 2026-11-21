@@ -10,12 +10,12 @@ import net.minecraft.util.Formatting;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-/** Główne menu moda FerrekKordy (klawisz M albo /wp menu). */
+/** Główne menu moda KordyXYZ (klawisz M albo /wp menu). */
 public class ModMenuScreen extends Screen {
     private final Screen parent;
 
     public ModMenuScreen(Screen parent) {
-        super(Text.literal("FerrekKordy"));
+        super(Text.literal("KordyXYZ"));
         this.parent = parent;
     }
 
@@ -81,7 +81,7 @@ public class ModMenuScreen extends Screen {
         int cx = this.width / 2;
         int top = Math.max(30, this.height / 2 - 100);
         context.drawCenteredTextWithShadow(this.textRenderer,
-                Text.literal("✦ FerrekKordy ✦").formatted(Formatting.GOLD, Formatting.BOLD), cx, top - 22, 0xFFFFFFFF);
+                Text.literal("✦ KordyXYZ ✦").formatted(Formatting.GOLD, Formatting.BOLD), cx, top - 22, 0xFFFFFFFF);
         context.drawCenteredTextWithShadow(this.textRenderer,
                 Text.literal("Ustawienia zapisują się same"), cx, top + 98, 0xFF888888);
     }

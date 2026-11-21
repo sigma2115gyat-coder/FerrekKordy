@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "ferrekkordy",
+  "id": "kordyxyz",
   "version": "${version}",
-  "name": "FerrekKordy",
+  "name": "KordyXYZ",
   "description": "Pokazuje koordynaty i od razu przelicza je na Nether/Overworld. Waypointy automatycznie mają swój odpowiednik w drugim wymiarze i świecące słupy w świecie.",
   "authors": [],
   "license": "MIT",

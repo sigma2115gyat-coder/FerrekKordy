@@ -1,8 +1,8 @@
 {
-  "category.ferrekkordy": "FerrekKordy",
-  "key.ferrekkordy.add": "Add waypoint here",
-  "key.ferrekkordy.list": "Waypoint list",
-  "key.ferrekkordy.hud": "Toggle coordinates HUD",
-  "key.ferrekkordy.beams": "Toggle waypoint beams",
-  "key.ferrekkordy.menu": "FerrekKordy menu"
+  "category.kordyxyz": "KordyXYZ",
+  "key.kordyxyz.add": "Add waypoint here",
+  "key.kordyxyz.list": "Waypoint list",
+  "key.kordyxyz.hud": "Toggle coordinates HUD",
+  "key.kordyxyz.beams": "Toggle waypoint beams",
+  "key.kordyxyz.menu": "KordyXYZ menu"
 }

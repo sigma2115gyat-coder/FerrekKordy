@@ -129,7 +129,7 @@ public final class WaypointCommands {
 
     private static int help(CommandContext<FabricClientCommandSource> ctx) {
         var src = ctx.getSource();
-        src.sendFeedback(Text.literal("FerrekKordy – komendy:").formatted(Formatting.GOLD));
+        src.sendFeedback(Text.literal("KordyXYZ – komendy:").formatted(Formatting.GOLD));
         src.sendFeedback(Text.literal("/wp add <nazwa> – waypoint tutaj"));
         src.sendFeedback(Text.literal("/wp at <x> <y> <z> <nazwa> – waypoint na koordach"));
         src.sendFeedback(Text.literal("/wp menu, /wp del <nazwa>, /wp list, /wp gui, /wp hud, /wp beams"));

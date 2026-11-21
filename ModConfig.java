@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/** Ustawienia moda (menu FerrekKordy). Zapisywane w config/ferrekkordy/ustawienia.json. */
+/** Ustawienia moda (menu KordyXYZ). Zapisywane w config/kordyxyz/ustawienia.json. */
 public class ModConfig {
     public static final String[] POSITIONS = {"Lewy górny róg", "Prawy górny róg", "Lewy dolny róg", "Prawy dolny róg"};
 
@@ -42,8 +42,25 @@ public class ModConfig {
         return instance;
     }
 
+    private static boolean migrated = false;
+
+    /** Folder moda w config/. Przy pierwszym uruchomieniu przenosi dane ze starej nazwy (ferrekkordy). */
+    public static Path configDir() {
+        Path dir = FabricLoader.getInstance().getConfigDir().resolve("kordyxyz");
+        if (!migrated) {
+            migrated = true;
+            Path old = FabricLoader.getInstance().getConfigDir().resolve("ferrekkordy");
+            try {
+                if (!Files.exists(dir) && Files.isDirectory(old)) Files.move(old, dir);
+            } catch (Exception e) {
+                FerrekKordyClient.LOGGER.warn("Nie udało się przenieść starego folderu ferrekkordy", e);
+            }
+        }
+        return dir;
+    }
+
     private static Path file() {
-        return FabricLoader.getInstance().getConfigDir().resolve("ferrekkordy").resolve("ustawienia.json");
+        return configDir().resolve("ustawienia.json");
     }
 
     public static void load() {

@@ -3,7 +3,6 @@ package com.ferrekkordy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.util.WorldSavePath;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/** Trzyma waypointy dla aktualnego świata/serwera i zapisuje je w config/ferrekkordy/. */
+/** Trzyma waypointy dla aktualnego świata/serwera i zapisuje je w config/kordyxyz/. */
 public final class WaypointManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Type LIST_TYPE = new TypeToken<List<Waypoint>>() {}.getType();
@@ -30,9 +29,7 @@ public final class WaypointManager {
 
     public static void load(MinecraftClient client) {
         WAYPOINTS.clear();
-        file = FabricLoader.getInstance().getConfigDir()
-                .resolve("ferrekkordy")
-                .resolve(worldKey(client) + ".json");
+        file = ModConfig.configDir().resolve(worldKey(client) + ".json");
         if (Files.exists(file)) {
             try (Reader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
                 List<Waypoint> loaded = GSON.fromJson(reader, LIST_TYPE);

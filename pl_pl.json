@@ -1,8 +1,8 @@
 {
-  "category.ferrekkordy": "FerrekKordy",
-  "key.ferrekkordy.add": "Dodaj waypoint tutaj",
-  "key.ferrekkordy.list": "Lista waypointów",
-  "key.ferrekkordy.hud": "Pokaż/ukryj koordynaty",
-  "key.ferrekkordy.beams": "Pokaż/ukryj słupy waypointów",
-  "key.ferrekkordy.menu": "Menu FerrekKordy"
+  "category.kordyxyz": "KordyXYZ",
+  "key.kordyxyz.add": "Dodaj waypoint tutaj",
+  "key.kordyxyz.list": "Lista waypointów",
+  "key.kordyxyz.hud": "Pokaż/ukryj koordynaty",
+  "key.kordyxyz.beams": "Pokaż/ukryj słupy waypointów",
+  "key.kordyxyz.menu": "Menu KordyXYZ"
 }

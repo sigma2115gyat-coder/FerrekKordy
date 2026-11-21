@@ -1,4 +1,4 @@
-# FerrekKordy – mod Fabric dla Minecraft 1.21.8
+# KordyXYZ – mod Fabric dla Minecraft 1.21.8
 
 Pokazuje koordynaty i od razu przelicza je Overworld ↔ Nether (÷8 / ×8).
 Waypoint dodany w jednym wymiarze od razu ma swój odpowiednik w drugim.
@@ -7,9 +7,9 @@ Waypoint dodany w jednym wymiarze od razu ma swój odpowiednik w drugim.
 - **HUD** (lewy górny róg): Twoje koordy w aktualnym wymiarze + przeliczone na drugi wymiar, kierunek patrzenia, 5 najbliższych waypointów (koordy, odległość, strzałka kierunku).
 - **Waypointy**: dodane w Overworldzie pokazują się w Netherze na X/8, Z/8 (i odwrotnie: z Netheru do Overworldu ×8). Wysokość Y w Netherze jest ograniczona do 1–125, żeby nie trafić nad dach z bedrocka.
 - **Słupy w świecie**: każdy waypoint ma świecący słup jak z beacona (w swoim kolorze) z nazwą i odległością widoczną przez ściany. Waypointy dalej niż zasięg renderowania pokazują się na horyzoncie, w dobrym kierunku.
-- Każdy świat w singlu i każdy serwer ma osobną listę: `.minecraft/config/ferrekkordy/`.
+- Każdy świat w singlu i każdy serwer ma osobną listę: `.minecraft/config/kordyxyz/`.
 
-## Klawisze (można zmienić w Opcje → Sterowanie → FerrekKordy)
+## Klawisze (można zmienić w Opcje → Sterowanie → KordyXYZ)
 | Klawisz | Co robi |
 |---|---|
 | **M** | menu moda (ustawienia HUD-a, słupów, pozycja napisów) |
@@ -41,11 +41,11 @@ gradlew.bat build
 ./gradlew build
 ```
 Za pierwszym razem pobiera Minecrafta i Fabric, więc może to potrwać kilka minut.
-Gotowy mod: `build/libs/ferrekkordy-1.0.0.jar`. Plik `-sources.jar` nie jest potrzebny.
+Gotowy mod: `build/libs/kordyxyz-1.0.0.jar`. Plik `-sources.jar` nie jest potrzebny.
 
 Możesz też otworzyć folder w **IntelliJ IDEA** (jako projekt Gradle) i uruchomić
 `Gradle → Tasks → build → build` albo `runClient`, żeby od razu odpalić grę z modem.
 
 ## Instalacja
-Wrzuć `ferrekkordy-1.0.0.jar` oraz **Fabric API** (wersja dla 1.21.8) do folderu `.minecraft/mods`
+Wrzuć `kordyxyz-1.0.0.jar` oraz **Fabric API** (wersja dla 1.21.8) do folderu `.minecraft/mods`
 i uruchom profil Fabric 1.21.8.

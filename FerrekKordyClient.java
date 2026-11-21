@@ -21,10 +21,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FerrekKordyClient implements ClientModInitializer {
-    public static final String MOD_ID = "ferrekkordy";
+    public static final String MOD_ID = "kordyxyz";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    private static final String CATEGORY = "category.ferrekkordy";
+    private static final String CATEGORY = "category.kordyxyz";
     private static KeyBinding menuKey;
     private static KeyBinding addKey;
     private static KeyBinding listKey;
@@ -36,11 +36,11 @@ public class FerrekKordyClient implements ClientModInitializer {
     public void onInitializeClient() {
         ModConfig.load();
 
-        menuKey = register("key.ferrekkordy.menu", GLFW.GLFW_KEY_M);
-        addKey = register("key.ferrekkordy.add", GLFW.GLFW_KEY_B);
-        listKey = register("key.ferrekkordy.list", GLFW.GLFW_KEY_N);
-        hudKey = register("key.ferrekkordy.hud", GLFW.GLFW_KEY_H);
-        beamKey = register("key.ferrekkordy.beams", GLFW.GLFW_KEY_K);
+        menuKey = register("key.kordyxyz.menu", GLFW.GLFW_KEY_M);
+        addKey = register("key.kordyxyz.add", GLFW.GLFW_KEY_B);
+        listKey = register("key.kordyxyz.list", GLFW.GLFW_KEY_N);
+        hudKey = register("key.kordyxyz.hud", GLFW.GLFW_KEY_H);
+        beamKey = register("key.kordyxyz.beams", GLFW.GLFW_KEY_K);
 
         ClientTickEvents.END_CLIENT_TICK.register(FerrekKordyClient::onTick);
 
@@ -55,7 +55,7 @@ public class FerrekKordyClient implements ClientModInitializer {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
                 WaypointCommands.register(dispatcher));
 
-        LOGGER.info("FerrekKordy załadowany");
+        LOGGER.info("KordyXYZ załadowany");
     }
 
     private static KeyBinding register(String key, int code) {
