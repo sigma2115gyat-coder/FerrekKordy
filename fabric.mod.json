@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "ferrekkordy",
+  "version": "${version}",
+  "name": "FerrekKordy",
+  "description": "Pokazuje koordynaty i od razu przelicza je na Nether/Overworld. Waypointy automatycznie mają swój odpowiednik w drugim wymiarze i świecące słupy w świecie.",
+  "authors": [],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.ferrekkordy.FerrekKordyClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "minecraft": "1.21.8",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
