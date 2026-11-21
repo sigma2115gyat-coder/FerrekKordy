@@ -20,8 +20,6 @@ import org.joml.Matrix4f;
  * w dobrą stronę, więc słup zawsze widać na horyzoncie.
  */
 public final class BeamRenderer {
-    public static boolean enabled = true;
-
     private static final Identifier BEAM_TEXTURE = Identifier.ofVanilla("textures/entity/beacon_beam.png");
     private static final int FULL_BRIGHT = 0xF000F0;
 
@@ -30,7 +28,7 @@ public final class BeamRenderer {
     public static void render(WorldRenderContext ctx) {
         MinecraftClient mc = MinecraftClient.getInstance();
         ClientWorld world = mc.world;
-        if (!enabled || world == null || mc.player == null) return;
+        if (!ModConfig.get().beams || world == null || mc.player == null) return;
         MatrixStack matrices = ctx.matrixStack();
         VertexConsumerProvider consumers = ctx.consumers();
         if (matrices == null || consumers == null) return;
@@ -76,9 +74,11 @@ public final class BeamRenderer {
                         (float) bx, (float) bz, w * 1.8f, y1, y2, 0x40000000 | rgb, scroll * 0.5f);
             }
 
-            double labelY = horiz > maxDist ? Math.max(Math.min(dy, 40), -10) : dy + 2.0;
-            drawLabel(mc.textRenderer, matrices, consumers, camera, bx, labelY, bz,
-                    wp.name + "  " + Math.round(realDist) + "m", 0xFF000000 | rgb, shownHoriz);
+            if (ModConfig.get().beamLabels) {
+                double labelY = horiz > maxDist ? Math.max(Math.min(dy, 40), -10) : dy + 2.0;
+                drawLabel(mc.textRenderer, matrices, consumers, camera, bx, labelY, bz,
+                        wp.icon() + " " + wp.name + "  " + Math.round(realDist) + "m", 0xFF000000 | rgb, shownHoriz);
+            }
         }
 
         if (consumers instanceof VertexConsumerProvider.Immediate immediate) {

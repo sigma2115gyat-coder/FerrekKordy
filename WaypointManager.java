@@ -22,10 +22,6 @@ import java.util.List;
 public final class WaypointManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Type LIST_TYPE = new TypeToken<List<Waypoint>>() {}.getType();
-    private static final int[] COLORS = {
-            0xFFFF5555, 0xFF55FF55, 0xFF55AAFF, 0xFFFFFF55,
-            0xFFFF55FF, 0xFF55FFFF, 0xFFFFAA00, 0xFFAAAAAA
-    };
 
     private static final List<Waypoint> WAYPOINTS = new ArrayList<>();
     private static Path file;
@@ -73,7 +69,7 @@ public final class WaypointManager {
     }
 
     public static Waypoint add(String name, String dimension, int x, int y, int z) {
-        Waypoint wp = new Waypoint(uniqueName(name), dimension, x, y, z, COLORS[WAYPOINTS.size() % COLORS.length]);
+        Waypoint wp = new Waypoint(uniqueName(name, null), dimension, x, y, z, ModConfig.PALETTE[WAYPOINTS.size() % 11]);
         WAYPOINTS.add(wp);
         save();
         return wp;
@@ -85,6 +81,11 @@ public final class WaypointManager {
         return removed;
     }
 
+    /** Zmiana nazwy z pilnowaniem, żeby dwa waypointy nie miały tej samej nazwy. */
+    public static void rename(Waypoint wp, String newName) {
+        wp.name = uniqueName(newName, wp);
+    }
+
     public static Waypoint find(String name) {
         for (Waypoint wp : WAYPOINTS) {
             if (wp.name.equalsIgnoreCase(name)) return wp;
@@ -93,15 +94,20 @@ public final class WaypointManager {
     }
 
     public static String nextDefaultName() {
-        return uniqueName("Punkt " + (WAYPOINTS.size() + 1));
+        return uniqueName("Punkt " + (WAYPOINTS.size() + 1), null);
     }
 
-    private static String uniqueName(String base) {
+    private static String uniqueName(String base, Waypoint except) {
         String name = base.isBlank() ? "Punkt" : base.trim();
-        if (find(name) == null) return name;
+        if (!taken(name, except)) return name;
         int i = 2;
-        while (find(name + " (" + i + ")") != null) i++;
+        while (taken(name + " (" + i + ")", except)) i++;
         return name + " (" + i + ")";
+    }
+
+    private static boolean taken(String name, Waypoint except) {
+        Waypoint other = find(name);
+        return other != null && other != except;
     }
 
     /** Osobny plik dla każdego świata w singlu i każdego serwera. */

@@ -3,5 +3,6 @@
   "key.ferrekkordy.add": "Dodaj waypoint tutaj",
   "key.ferrekkordy.list": "Lista waypointów",
   "key.ferrekkordy.hud": "Pokaż/ukryj koordynaty",
-  "key.ferrekkordy.beams": "Pokaż/ukryj słupy waypointów"
+  "key.ferrekkordy.beams": "Pokaż/ukryj słupy waypointów",
+  "key.ferrekkordy.menu": "Menu FerrekKordy"
 }

@@ -11,7 +11,7 @@ import net.minecraft.util.Formatting;
 
 import java.util.List;
 
-/** Lista waypointów: koordy w Overworldzie i Netherze, ukrywanie i usuwanie. */
+/** Lista waypointów: koordy w Overworldzie i Netherze, edycja (kolor, ikona, nazwa), ukrywanie i usuwanie. */
 public class WaypointListScreen extends Screen {
     private static final int TOP = 34;
     private static final int ROW_H = 26;
@@ -24,7 +24,7 @@ public class WaypointListScreen extends Screen {
     }
 
     private int panelWidth() {
-        return Math.min(this.width - 20, 420);
+        return Math.min(this.width - 20, 440);
     }
 
     private int left() {
@@ -44,8 +44,7 @@ public class WaypointListScreen extends Screen {
         page = Math.max(0, Math.min(page, pageCount() - 1));
         List<Waypoint> list = WaypointManager.all();
         int per = rowsPerPage();
-        int left = left();
-        int right = left + panelWidth();
+        int right = left() + panelWidth();
 
         for (int i = 0; i < per; i++) {
             int index = page * per + i;
@@ -53,11 +52,15 @@ public class WaypointListScreen extends Screen {
             Waypoint wp = list.get(index);
             int rowY = TOP + i * ROW_H;
 
+            this.addDrawableChild(ButtonWidget.builder(Text.literal("Edytuj"), b -> {
+                if (this.client != null) this.client.setScreen(new AddWaypointScreen(this, wp));
+            }).dimensions(right - 154, rowY + 2, 50, 20).build());
+
             this.addDrawableChild(ButtonWidget.builder(Text.literal(wp.visible ? "Ukryj" : "Pokaż"), b -> {
                 wp.visible = !wp.visible;
                 WaypointManager.save();
                 this.clearAndInit();
-            }).dimensions(right - 106, rowY + 2, 56, 20).build());
+            }).dimensions(right - 102, rowY + 2, 52, 20).build());
 
             this.addDrawableChild(ButtonWidget.builder(Text.literal("Usuń").formatted(Formatting.RED), b -> {
                 WaypointManager.remove(wp);
@@ -83,7 +86,7 @@ public class WaypointListScreen extends Screen {
                         p.getBlockX(), p.getBlockY(), p.getBlockZ()));
             }
         }).dimensions(cx - 130, by, 128, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("Zamknij"), b -> close())
+        this.addDrawableChild(ButtonWidget.builder(Text.literal(parent != null ? "Wróć" : "Zamknij"), b -> close())
                 .dimensions(cx + 2, by, 128, 20).build());
     }
 
@@ -115,17 +118,19 @@ public class WaypointListScreen extends Screen {
             int rowY = TOP + i * ROW_H;
 
             context.fill(left, rowY, left + panelWidth(), rowY + ROW_H - 2, 0x60000000);
-            context.fill(left + 4, rowY + 5, left + 10, rowY + 11, wp.color);
 
+            int iconColor = wp.visible ? wp.color : 0xFF555555;
             int nameColor = wp.visible ? 0xFFFFFFFF : 0xFF777777;
-            String origin = "  (stworzony w: " + Dims.pretty(wp.dimension) + ")";
-            context.drawTextWithShadow(this.textRenderer, wp.name, left + 14, rowY + 4, nameColor);
-            context.drawTextWithShadow(this.textRenderer, origin,
-                    left + 14 + this.textRenderer.getWidth(wp.name), rowY + 4, 0xFF777777);
+            context.drawTextWithShadow(this.textRenderer, wp.icon(), left + 5, rowY + 4, iconColor);
+            int nx = left + 5 + this.textRenderer.getWidth(wp.icon() + " ");
+            context.drawTextWithShadow(this.textRenderer, wp.name, nx, rowY + 4, nameColor);
+            context.drawTextWithShadow(this.textRenderer, "  (" + Dims.pretty(wp.dimension) + ")",
+                    nx + this.textRenderer.getWidth(wp.name), rowY + 4, 0xFF777777);
+
             String coords = wp.isLinked()
                     ? "OW: " + Waypoint.fmt(wp.posIn(Dims.OVERWORLD)) + "   Nether: " + Waypoint.fmt(wp.posIn(Dims.NETHER))
                     : Dims.pretty(wp.dimension) + ": " + Waypoint.fmt(wp.posIn(wp.dimension));
-            context.drawTextWithShadow(this.textRenderer, coords, left + 14, rowY + 14, 0xFFAAAAAA);
+            context.drawTextWithShadow(this.textRenderer, coords, left + 5, rowY + 14, 0xFFAAAAAA);
         }
     }
 }

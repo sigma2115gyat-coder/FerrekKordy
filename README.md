@@ -12,8 +12,9 @@ Waypoint dodany w jednym wymiarze od razu ma swój odpowiednik w drugim.
 ## Klawisze (można zmienić w Opcje → Sterowanie → FerrekKordy)
 | Klawisz | Co robi |
 |---|---|
+| **M** | menu moda (ustawienia HUD-a, słupów, pozycja napisów) |
 | **B** | dodaj waypoint w miejscu, gdzie stoisz (wpisujesz nazwę, Enter zapisuje) |
-| **N** | lista waypointów (ukryj/pokaż, usuń) |
+| **N** | lista waypointów (edytuj kolor/ikonę/nazwę, ukryj/pokaż, usuń) |
 | **H** | pokaż/ukryj HUD |
 | **K** | pokaż/ukryj słupy waypointów |
 
@@ -23,6 +24,7 @@ Waypoint dodany w jednym wymiarze od razu ma swój odpowiednik w drugim.
 - `/wp del <nazwa>` – usuń (Tab podpowiada nazwy)
 - `/wp list` – lista w czacie
 - `/wp gui` – okno z listą
+- `/wp menu` – menu moda
 - `/wp calc <x> <z>` – kalkulator Overworld ↔ Nether
 - `/wp hud` – pokaż/ukryj HUD
 - `/wp beams` – pokaż/ukryj słupy

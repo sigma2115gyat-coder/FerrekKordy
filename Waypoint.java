@@ -13,6 +13,7 @@ public class Waypoint {
     public int z;
     public int color;
     public boolean visible = true;
+    public String icon = "●";
 
     public Waypoint() {}
 
@@ -35,6 +36,10 @@ public class Waypoint {
             return new int[]{Dims.toOverworld(x), y, Dims.toOverworld(z)};
         }
         return null;
+    }
+
+    public String icon() {
+        return icon == null || icon.isEmpty() ? "●" : icon;
     }
 
     public boolean isLinked() {

@@ -7,12 +7,14 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
@@ -23,22 +25,22 @@ public class FerrekKordyClient implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     private static final String CATEGORY = "category.ferrekkordy";
+    private static KeyBinding menuKey;
     private static KeyBinding addKey;
     private static KeyBinding listKey;
     private static KeyBinding hudKey;
     private static KeyBinding beamKey;
-    private static boolean openListNextTick = false;
+    private static Screen pendingScreen = null;
 
     @Override
     public void onInitializeClient() {
-        addKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.ferrekkordy.add", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_B, CATEGORY));
-        listKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.ferrekkordy.list", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_N, CATEGORY));
-        hudKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.ferrekkordy.hud", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_H, CATEGORY));
-        beamKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.ferrekkordy.beams", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY));
+        ModConfig.load();
+
+        menuKey = register("key.ferrekkordy.menu", GLFW.GLFW_KEY_M);
+        addKey = register("key.ferrekkordy.add", GLFW.GLFW_KEY_B);
+        listKey = register("key.ferrekkordy.list", GLFW.GLFW_KEY_N);
+        hudKey = register("key.ferrekkordy.hud", GLFW.GLFW_KEY_H);
+        beamKey = register("key.ferrekkordy.beams", GLFW.GLFW_KEY_K);
 
         ClientTickEvents.END_CLIENT_TICK.register(FerrekKordyClient::onTick);
 
@@ -56,19 +58,27 @@ public class FerrekKordyClient implements ClientModInitializer {
         LOGGER.info("FerrekKordy załadowany");
     }
 
+    private static KeyBinding register(String key, int code) {
+        return KeyBindingHelper.registerKeyBinding(new KeyBinding(key, InputUtil.Type.KEYSYM, code, CATEGORY));
+    }
+
     /** Komenda zamyka czat po wykonaniu, więc okno otwieramy w następnym ticku. */
-    public static void openListNextTick() {
-        openListNextTick = true;
+    public static void openNextTick(Screen screen) {
+        pendingScreen = screen;
     }
 
     private static void onTick(MinecraftClient client) {
         if (client.player == null) return;
 
-        if (openListNextTick) {
-            openListNextTick = false;
-            client.setScreen(new WaypointListScreen(null));
+        if (pendingScreen != null) {
+            client.setScreen(pendingScreen);
+            pendingScreen = null;
         }
 
+        ModConfig cfg = ModConfig.get();
+        while (menuKey.wasPressed()) {
+            client.setScreen(new ModMenuScreen(null));
+        }
         while (addKey.wasPressed()) {
             client.setScreen(new AddWaypointScreen(null, Dims.current(client),
                     client.player.getBlockX(), client.player.getBlockY(), client.player.getBlockZ()));
@@ -77,12 +87,14 @@ public class FerrekKordyClient implements ClientModInitializer {
             client.setScreen(new WaypointListScreen(null));
         }
         while (hudKey.wasPressed()) {
-            CoordsHud.enabled = !CoordsHud.enabled;
+            cfg.hud = !cfg.hud;
+            ModConfig.save();
         }
         while (beamKey.wasPressed()) {
-            BeamRenderer.enabled = !BeamRenderer.enabled;
-            client.inGameHud.setOverlayMessage(net.minecraft.text.Text.literal(
-                    "Słupy waypointów: " + (BeamRenderer.enabled ? "włączone" : "wyłączone")), false);
+            cfg.beams = !cfg.beams;
+            ModConfig.save();
+            client.inGameHud.setOverlayMessage(Text.literal(
+                    "Słupy waypointów: " + (cfg.beams ? "włączone" : "wyłączone")), false);
         }
     }
 }

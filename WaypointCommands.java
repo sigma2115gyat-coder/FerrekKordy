@@ -18,6 +18,7 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.lit
  * /wp del <nazwa>            – usuń
  * /wp list                   – lista w czacie
  * /wp gui                    – okno z listą
+ * /wp menu                   – menu moda
  * /wp calc <x> <z>           – szybki kalkulator Overworld <-> Nether
  * /wp hud                    – pokaż/ukryj HUD
  * /wp beams                  – pokaż/ukryj słupy w świecie
@@ -53,18 +54,24 @@ public final class WaypointCommands {
                                 .executes(WaypointCommands::delete)))
                 .then(literal("list").executes(WaypointCommands::list))
                 .then(literal("gui").executes(ctx -> {
-                    FerrekKordyClient.openListNextTick();
+                    FerrekKordyClient.openNextTick(new com.ferrekkordy.screen.WaypointListScreen(null));
+                    return 1;
+                }))
+                .then(literal("menu").executes(ctx -> {
+                    FerrekKordyClient.openNextTick(new ModMenuScreen(null));
                     return 1;
                 }))
                 .then(literal("hud").executes(ctx -> {
-                    CoordsHud.enabled = !CoordsHud.enabled;
-                    ctx.getSource().sendFeedback(Text.literal("HUD koordynatów: " + (CoordsHud.enabled ? "włączony" : "wyłączony"))
+                    ModConfig.get().hud = !ModConfig.get().hud;
+                    ModConfig.save();
+                    ctx.getSource().sendFeedback(Text.literal("HUD koordynatów: " + (ModConfig.get().hud ? "włączony" : "wyłączony"))
                             .formatted(Formatting.YELLOW));
                     return 1;
                 }))
                 .then(literal("beams").executes(ctx -> {
-                    BeamRenderer.enabled = !BeamRenderer.enabled;
-                    ctx.getSource().sendFeedback(Text.literal("Słupy waypointów: " + (BeamRenderer.enabled ? "włączone" : "wyłączone"))
+                    ModConfig.get().beams = !ModConfig.get().beams;
+                    ModConfig.save();
+                    ctx.getSource().sendFeedback(Text.literal("Słupy waypointów: " + (ModConfig.get().beams ? "włączone" : "wyłączone"))
                             .formatted(Formatting.YELLOW));
                     return 1;
                 }))
@@ -77,7 +84,7 @@ public final class WaypointCommands {
     private static int add(FabricClientCommandSource src, String name, int x, int y, int z) {
         Waypoint wp = WaypointManager.add(name, Dims.current(src.getClient()), x, y, z);
         src.sendFeedback(Text.literal("Dodano waypoint ").formatted(Formatting.GREEN)
-                .append(Text.literal(wp.name).formatted(Formatting.WHITE)));
+                .append(Text.literal(wp.icon() + " " + wp.name).withColor(wp.color & 0xFFFFFF)));
         src.sendFeedback(Text.literal(wp.describe()).formatted(Formatting.GRAY));
         return 1;
     }
@@ -103,7 +110,7 @@ public final class WaypointCommands {
         src.sendFeedback(Text.literal("Waypointy (" + WaypointManager.all().size() + "):").formatted(Formatting.GOLD));
         for (Waypoint wp : WaypointManager.all()) {
             src.sendFeedback(Text.literal(" • ").formatted(Formatting.GRAY)
-                    .append(Text.literal(wp.name).formatted(wp.visible ? Formatting.WHITE : Formatting.DARK_GRAY))
+                    .append(Text.literal(wp.icon() + " " + wp.name).withColor(wp.visible ? (wp.color & 0xFFFFFF) : 0x555555))
                     .append(Text.literal("  " + wp.describe()).formatted(Formatting.GRAY)));
         }
         return 1;
@@ -125,7 +132,7 @@ public final class WaypointCommands {
         src.sendFeedback(Text.literal("FerrekKordy – komendy:").formatted(Formatting.GOLD));
         src.sendFeedback(Text.literal("/wp add <nazwa> – waypoint tutaj"));
         src.sendFeedback(Text.literal("/wp at <x> <y> <z> <nazwa> – waypoint na koordach"));
-        src.sendFeedback(Text.literal("/wp del <nazwa>, /wp list, /wp gui, /wp hud, /wp beams"));
+        src.sendFeedback(Text.literal("/wp menu, /wp del <nazwa>, /wp list, /wp gui, /wp hud, /wp beams"));
         src.sendFeedback(Text.literal("/wp calc <x> <z> – przelicz Overworld ↔ Nether"));
         return 1;
     }
